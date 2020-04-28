@@ -1,5 +1,3 @@
-//import { BigNumber } from "bignumber.js";
-// import { TutorialToken } from "./contract-types/TutorialToken"; // import is correct
 import React from "react";
 import Modal from "react-modal";
 import "./Writer.css";
@@ -11,23 +9,26 @@ import FileUpload from "../file-upload/FileUpload";
 const Web3 = require("web3");
 export let web3: typeof Web3;
 
-// need to fix
-interface Dictionary<Letter> {
-  [key: number]: Letter;
+// need a dictionary to map letter id to letter
+interface Dictionary<T> {
+  [key: number]: T;
 }
 
 interface WriterState {
-  // need to change into dictionary
-  letters: Letter[]; // letter table
-  sentLetters: SentLetter[]; // letter-recipient table
+  letters: Letter[]; // from letter table
+  sentLetters: SentLetter[]; // from sentLetter table
   modalIsOpen: boolean;
   letterKey: number;
 }
 
 class Writer extends React.Component<User, WriterState> {
   componentWillMount() {
-    // api call to get letters
+    // for modal
     Modal.setAppElement("body");
+
+    // TODO: make api call to get letters
+
+    // sample data
     this.setState({
       letters: [
         {
@@ -110,44 +111,63 @@ class Writer extends React.Component<User, WriterState> {
     };
   }
 
+  /**
+   * when upload button is clicked
+   * @param event mouse click of upload button
+   * @param key letter id
+   */
   onUploadClick(
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     key: number
   ) {
+    // open upload modal
     this.openUploadModal(key);
   }
 
+  /**
+   * when view button is clicked
+   * @param event mouse click of view button
+   * @param key letter id
+   */
   onViewClick(
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     key: number
-  ) {}
+  ) {
+    // TODO: open view modal
+  }
 
+  /**
+   * opens upload modal
+   * @param key letter id
+   */
   openUploadModal(key: number) {
     this.setState({ modalIsOpen: true, letterKey: key });
   }
 
+  /**
+   * close upload modal by setting modal state to false
+   */
   closeUploadModal() {
     this.setState({ modalIsOpen: false });
   }
 
+  /**
+   * callback for when uploaded file is submitted
+   * closes modal
+   * @param file letter as a FormData object
+   */
   onUploadSubmit(file: FormData) {
     this.closeUploadModal();
-    console.log(this.state.letterKey);
-    console.log(file);
+    // console.log(this.state.letterKey);
+    // console.log(file);
     // send letter to backend
   }
-
-  // letterView() {
-  //   if (this.state.letters.) {
-  //     return <UserGreeting />;
-  //   }
-  //   return <GuestGreeting />;
-  // }
 
   render() {
     const { name, public_key, user_id } = this.props;
     const { letters, sentLetters, modalIsOpen, letterKey } = this.state;
 
+    // letter list
     const lettersList = letters.map((l, key) => (
       <div key={l.letter_id}>
         <p>
@@ -171,11 +191,11 @@ class Writer extends React.Component<User, WriterState> {
           >
             upload
           </button>
-
         </p>
       </div>
     ));
 
+    // sentLetter list
     const sentLettersList = sentLetters.map((l, key) => (
       <div key={l.letter_id + "x" + l.recipient.user_id}>
         <p>

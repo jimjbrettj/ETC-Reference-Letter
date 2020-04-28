@@ -28,27 +28,27 @@ export async function deployContract<T>(
   ...args: any[]
 ): Promise<T> {
   const Contract = new web3.eth.Contract(abi);
-  console.log("Contract1: ");
-  console.log(Contract);
+  // console.log("Contract1: ");
+  // console.log(Contract);
   const accounts = await web3.eth.getAccounts();
-  console.log(accounts);
-  console.log("deploying contract now");
+  // console.log(accounts);
+  // console.log("deploying contract now");
 
   const contractResult = await Contract.deploy({ data: code }).send({
-    from: accounts[0]
+    from: accounts[0],
   });
   return contractResult as any;
 }
 
 export async function deployTutorialToken(): Promise<TutorialToken> {
-  console.log("Deploying Contract from innner deploy tutorial token method: ");
+  // console.log("Deploying Contract from innner deploy tutorial token method: ");
   var contract = await deployContract<TutorialToken>(
     "TutorialToken",
     TutorialTokenContractData.abi,
     TutorialTokenContractData.bytecode,
     0
   );
-  console.log("Contract from innner deploy tutorial token method: " + contract);
+  // console.log("Contract from innner deploy tutorial token method: " + contract);
   return contract;
 }
 
@@ -57,42 +57,42 @@ type MyState = {
   numErcBeingTraded: number;
   contract: TutorialToken;
 };
+
 class App extends React.Component<MyProps, MyState> {
   constructor(props: any) {
     super(props);
     this.state = {
       numErcBeingTraded: 0,
-      contract: {} as TutorialToken
+      contract: {} as TutorialToken,
     };
-
-    //this.handleErcInputChange = this.handleErcInputChange.bind(this);
+    // this.handleErcInputChange = this.handleErcInputChange.bind(this);
   }
 
   handleErcInputChange(event: any) {
     this.setState({
-      numErcBeingTraded: event.target.value
+      numErcBeingTraded: event.target.value,
     });
-    console.log("Num of ERC wanted to trade: " + this.state.numErcBeingTraded);
+    // console.log("Num of ERC wanted to trade: " + this.state.numErcBeingTraded);
     var rate = this.state.contract.methods.rate().call();
     var numErc = new BN(this.state.numErcBeingTraded);
-    //var numTokens = rate.mul(numErc);
-    //console.log("Num of Tutorial Tokens you can receive: " + numTokens.toString());
+    // var numTokens = rate.mul(numErc);
+    // console.log("Num of Tutorial Tokens you can receive: " + numTokens.toString());
   }
 
   async componentDidMount() {
     // TODO: Do all this stuff once onComponentDidMount
     // Same with all my async shit
     const ethereum = (window as any).ethereum;
-    //TODO Ethereum enable may still be necessary
+    // TODO: Ethereum enable may still be necessary
     // await ethereum.enable()
     web3Provider = (window as any).web3.currentProvider;
-    // NOTE you might need this
-    //await ethereum.send('eth_requestAccounts')
+    // NOTE: you might need this
+    // await ethereum.send('eth_requestAccounts')
 
     web3 = new Web3(web3Provider);
 
     const accounts = await web3.eth.getAccounts();
-    console.log(accounts);
+    // console.log(accounts);
 
     contract = await deployTutorialToken();
 
@@ -112,11 +112,13 @@ class App extends React.Component<MyProps, MyState> {
               </Navbar.Text>
             </Navbar.Collapse>
           </Navbar>
+
           {/* <Row noGutters>
             <h1><b><i>Send ETC for Tutorial Token</i></b></h1>
             <p>Amount ETC <input value={this.state.numErcBeingTraded} onChange={e => this.handleErcInputChange(e) }/></p>
 	  		    <button>Purchase</button>
           </Row> */}
+
           <Row noGutters>
             <Col>
               <Requestor

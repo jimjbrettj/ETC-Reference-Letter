@@ -1,5 +1,3 @@
-//import { BigNumber } from "bignumber.js";
-// import { TutorialToken } from "./contract-types/TutorialToken"; // import is correct
 import React from "react";
 import User from "../../interfaces/User.interface";
 import Letter from "../../interfaces/Letter.interface";
@@ -14,7 +12,9 @@ interface RecipientState {
 
 class Recipient extends React.Component<User, RecipientState> {
   componentWillMount() {
-    // api call to get letters
+    // TODO: make api call to get letters
+
+    // sample data
     this.setState({
       letters: [
         {
@@ -22,44 +22,57 @@ class Recipient extends React.Component<User, RecipientState> {
           writer: {
             user_id: 101,
             name: "Mary Poppins",
-            public_key: "0x314159265358979323"
+            public_key: "0x314159265358979323",
           },
           requester: {
             user_id: 102,
             name: "Simba",
-            public_key: "0xabcdefghijklmnop"
+            public_key: "0xabcdefghijklmnop",
           },
-          letter_uploaded: false
+          letter_uploaded: false,
         },
         {
           letter_id: 2,
           writer: {
             user_id: 101,
             name: "Mary Poppins",
-            public_key: "0x314159265358979323"
+            public_key: "0x314159265358979323",
           },
           requester: {
             user_id: 102,
             name: "Simba",
-            public_key: "0xabcdefghijklmnop"
+            public_key: "0xabcdefghijklmnop",
           },
-          letter_uploaded: false
-        }
-      ]
+          letter_uploaded: false,
+        },
+      ],
     });
   }
 
   constructor(props: User) {
     super(props);
     this.state = {
-      letters: []
+      letters: [],
     };
+  }
+
+  /**
+   * when view button is clicked
+   * @param event mouse click of view button
+   * @param key letter id
+   */
+  onViewClick(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    key: number
+  ) {
+    // TODO: open view modal
   }
 
   render() {
     const { name, public_key, user_id } = this.props;
     const { letters } = this.state;
 
+    // letter list
     const lettersList = letters.map((l, key) => (
       <div key={l.letter_id}>
         <p>
@@ -67,9 +80,9 @@ class Recipient extends React.Component<User, RecipientState> {
           <span>For: {l.requester.name} </span>
           <button
             style={{ marginLeft: "10px", float: "right" }}
-            // onClick={(e) => {
-            //   this.onViewClick(e, l.letter_id);
-            // }}
+            onClick={(e) => {
+              // this.onViewClick(e, l.letter_id);
+            }}
           >
             view
           </button>
